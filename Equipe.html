@@ -178,7 +178,7 @@
             const userData = JSON.parse(localStorage.getItem('user_data'));
 
             if (userData && userData.codigo_convite) {
-                const inviteLink = `file:///C:/Users/us/Desktop/software/registrar.html?codigo_convite=${userData.codigo_convite}`;
+                const inviteLink = `https://first-solar.onrender.com/registrar.html?codigo_convite=${userData.codigo_convite}`;
                 const inviteLinkElement = document.getElementById('invite-link');
                 if (inviteLinkElement) {
                     inviteLinkElement.href = inviteLink;
