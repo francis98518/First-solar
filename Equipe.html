@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 70px);
+            overflow: auto;
+            background-color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .banner {
+            width: 100%;
+            height: 200px;
+            background-image: url('https://www.orsted-ao.com/static/backimg/cumulative.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .codigo {
+            font-size: 20px;
+            font-weight: bold;
+            color: orange;
+            margin: 10px 0;
+        }
+
+        .botao {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .botao:hover {
+            background-color: #0056b3;
+        }
+
+        .equipe {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .nivel {
+            display: flex;
+            justify-content: space-between;
+            background: black;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .rodape {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            z-index: 9999;
+        }
+
+        .rodape div {
+            text-align: center;
+            flex: 1;
+        }
+
+        .rodape div a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .rodape div img {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Toast Styling */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s linear;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="banner"></div>
+        <h2>código de convite</h2>
+        
+        <!-- Link com o id invite-link (oculto) -->
+        <a href="#" id="invite-link" style="display: none;">Link de Convite</a>
+        <button class="botao" id="copy-button">Copiar Link</button>
+
+        <div class="equipe">
+            <h3>Minha equipa</h3>
+            <div class="nivel">
+                <span>L1</span>
+                <span>Tamanho da equipe: <span id="total-pessoas">0</span></span>
+                <span>Renda total: <span id="total-recarga">0.00</span></span>
+            </div>
+            Aumente sua renda convidando amigos e familiares, e ganhe até 24% de comissão. Desfrute-se agora mesmo!
+        </div>
+    </div>
+
+    <!-- Rodapé fixo -->
+    <div class="rodape">
+        <div>
+            <a href="home.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/home-select.png" alt="Home">
+                <p>Home</p>
+            </a>
+        </div>
+        <div>
+            <a href="ganhos.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/product.png" alt="Ganhos">
+                <p>Ganhos</p>
+            </a>
+        </div>
+        <div>
+            <a href="Equipe.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/team.png" alt="Equipe">
+                <p>Equipe</p>
+            </a>
+        </div>
+        <div>
+            <a href="meu.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/mine02.png" alt="Meu">
+                <p>Meu</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Toast de mensagem de sucesso -->
+    <div id="toast" class="toast">Link de convite copiado com sucesso!</div>
+
+    <script>
+        // Função para buscar o código de convite do usuário logado
+        function getInviteCodeFromLocalStorage() {
+            const userData = JSON.parse(localStorage.getItem('user_data'));
+
+            if (userData && userData.codigo_convite) {
+                const inviteLink = `file:///C:/Users/us/Desktop/software/registrar.html?codigo_convite=${userData.codigo_convite}`;
+                const inviteLinkElement = document.getElementById('invite-link');
+                if (inviteLinkElement) {
+                    inviteLinkElement.href = inviteLink;
+                }
+
+                fetchUsersByInviteCode(userData.codigo_convite);
+            } else {
+                const inviteLinkElement = document.getElementById('invite-link');
+                if (inviteLinkElement) {
+                    inviteLinkElement.textContent = "Código de convite não disponível.";
+                }
+            }
+        }
+
+        // Função para buscar os usuários que se cadastraram com o código de convite do usuário logado
+        function fetchUsersByInviteCode(codigoConvite) {
+            fetch('https://meuappi.onrender.com/usuarios')
+                .then(response => response.json())
+                .then(data => {
+                    const users = data.filter(user => user.codigo_convite_referido === codigoConvite);
+                    const userData = JSON.parse(localStorage.getItem('user_data'));
+                    const filteredUsers = users.filter(user => user.id !== userData.id);
+
+                    const totalPessoas = filteredUsers.length;
+                    const totalSaldo = filteredUsers.reduce((total, user) => {
+                        const saldoValue = user.saldo ? parseFloat(user.saldo) : 0;
+                        return total + saldoValue;
+                    }, 0).toFixed(2);
+
+                    document.getElementById('total-pessoas').textContent = totalPessoas;
+                    document.getElementById('total-recarga').textContent = `AKZ ${totalSaldo}`;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados da API:', error);
+                });
+        }
+
+        // Função para copiar o link de convite
+        function copyInviteLink() {
+            const inviteLink = document.getElementById('invite-link').href;
+            const textarea = document.createElement('textarea');
+            textarea.value = inviteLink;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            // Exibe o toast de sucesso
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            getInviteCodeFromLocalStorage();
+        };
+
+        // Evento para o botão de copiar
+        document.getElementById('copy-button').addEventListener('click', copyInviteLink);
+    </script>
+</body>
+</html>

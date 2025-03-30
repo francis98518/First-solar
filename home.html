@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orsted - Página Inicial</title>
+    <!-- Incluindo o jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden; /* Esconde o excesso de imagem */
+        }
+
+        .header .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .header .active {
+            opacity: 1;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            background: black;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .menu div {
+            text-align: center;
+            flex: 1;
+        }
+
+        .menu div a {
+            text-decoration: none; /* Remove o sublinhado do link */
+            color: white; /* Cor do texto como branco */
+            display: block;
+            text-align: center;
+        }
+
+        .menu div img {
+            width: 24px;
+            height: 24px;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        .menu div p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .section {
+            padding: 20px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .bottom-images {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bottom-images img {
+            width: 49%;
+            border-radius: 5px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer div {
+            text-align: center;
+            flex: 1;
+        }
+
+        .footer div a {
+            text-decoration: none; /* Remove o sublinhado do link */
+            color: black; /* Cor do texto para o footer */
+        }
+
+        .footer div img {
+            width: 24px;
+            height: 24px;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);  /* Centraliza vertical e horizontalmente */
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            width: 300px;
+            text-align: center;
+            z-index: 9999;  /* Garante que a notificação fique acima de outros elementos */
+        }
+
+        .notification h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .notification p {
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .notification button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .notification .telegram-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            background: #0088cc; /* Cor do Telegram */
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .notification .telegram-btn img {
+            width: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="slide active" style="background-image: url('https://kko.orsted-ao.com//uploads/image/20250323/8e06a871b9e71f49525afb10a4088ec3.jpg');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/backimg/withdraw.png');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/backimg/cumulative.png');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/backimg/balance.png');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/ahome.png');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/ahome2.png');"></div>
+        <div class="slide" style="background-image: url('https://www.orsted-ao.com/static/backimg/notice.png');"></div>
+    </div>
+
+    <!-- Outras seções do HTML seguem normalmente -->
+
+    <script>
+        $(document).ready(function() {
+            let currentIndex = 0;  // índice da imagem atual
+            const slides = $(".header .slide");  // Seleciona todas as imagens do carrossel
+            const totalSlides = slides.length;  // Total de imagens
+
+            function showNextSlide() {
+                // Remove a classe 'active' da imagem atual
+                $(slides[currentIndex]).removeClass("active");
+
+                // Calcula o próximo índice
+                currentIndex = (currentIndex + 1) % totalSlides;
+
+                // Adiciona a classe 'active' à próxima imagem
+                $(slides[currentIndex]).addClass("active");
+            }
+
+            // Intervalo para alternar entre as imagens
+            setInterval(showNextSlide, 3000);  // Troca de imagem a cada 3 segundos
+
+            // Chama a função para mostrar a primeira imagem
+            showNextSlide();
+        });
+    </script>
+
+    <div class="menu">
+        <div>
+            <a href="recarregar.html">
+                <img src="https://www.orsted-ao.com/static/home-center23.1c548182.png" alt="Recargar">
+                <p>recarregar</p>
+            </a>
+        </div>
+        <div>
+            <a href="retirar.html">
+                <img src="https://www.orsted-ao.com/static/icon/tab-records.png" alt="Retirar Dinheiro">
+                <p>retirar</p>
+            </a>
+        </div>
+        <div>
+            <a href="apresentar.html">
+                <img src="https://www.orsted-ao.com/static/ahome2.png" alt="Apresentar">
+                <p>apresentar</p>
+            </a>
+        </div>
+        <div>
+            <a href="https://exemplo.com/tarefa">
+                <img src="https://kko.orsted-ao.com//uploads/image/20250323/83a7e0398fd76170a54267c679e33365.jpg" alt="Tarefa">
+                <p>TAREFA</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>primeiros movimentos</h3>
+        <div class="cards">
+            <div class="card">
+                <img src="https://www.orsted-ao.com/static/icon/card.png" alt="Saldo Atual">
+                <!-- Aqui colocamos o saldo do usuário -->
+                <p id="saldo">0.00</p>
+                <p>Saldo atual</p>
+            </div>
+            <div class="card">
+                <img src="https://www.orsted-ao.com/static/icon/card.png" alt="Receita de Equipamento">
+                <p>0.00</p>
+                <p>receita de equipamento</p>
+            </div>
+            <div class="card">
+                <img src="https://www.orsted-ao.com/static/icon/card.png" alt="Saque da Conta">
+                <p>0.00</p>
+                <p>Saque da conta</p>
+            </div>
+        </div>
+        
+        <h3>hacer una oferta</h3>
+
+        <div class="bottom-images">
+            <img src="https://www.orsted-ao.com/static/backimg/withdraw.png" alt="Imagem 1">
+            <img src="https://www.orsted-ao.com/static/backimg/cumulative.png" alt="Imagem 2">
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <a href="home.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/home-select.png" alt="Home">
+                <p>Home</p>
+            </a>
+        </div>
+        <div>
+            <a href="ganhos.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/product.png" alt="Ganhos">
+                <p>Ganhos</p>
+            </a>
+        </div>
+        <div>
+            <a href="Equipe.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/team.png" alt="Equipe">
+                <p>Equipe</p>
+            </a>
+        </div>
+        <div>
+            <a href="meu.html">
+                <img src="https://www.orsted-ao.com/static/tabbar/mine02.png" alt="Meu">
+                <p>Meu</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Notificação -->
+    <div class="notification" id="notification">
+        <h3>👋 Bem-vindo à First Solar!</h3>
+        <p>🌞 Sejá bem-vindo de volta!<br><br>
+        💸 O valor mínimo de levantamento é de apenas 1000Kz.<br>
+        ⚡ A operação é simples e o levantamento é rápido.<br>
+        💼 Bônus de comissão de equipe de até <strong>24%</strong> no primeiro nível.<br>
+        🔁 Deixe seu rendimento continuar a crescer.<br><br>
+        🎉 Bônus ativado automaticamente em cada recarga do convidado.<br><br>
+        🚀 Junte-se à First Solar, desfrute de uma experiência de investimento segura e conveniente, e inicie sua viagem de riqueza!</p>
+        
+        <button onclick="closeNotification()">Fechar</button>
+        
+        <!-- Botão Telegram -->
+        <a href="https://t.me/+Iz9FrlfeF2Y1MjFk" target="_blank">
+            <button class="telegram-btn">
+                <img src="https://www.orsted-ao.com/static/icon/temlegram.png" alt="Telegram"> Telegram
+            </button>
+        </a>
+    </div>
+
+    <script>
+        // Função para exibir a notificação
+        window.onload = function() {
+            document.getElementById('notification').style.display = 'block'; // Exibe a notificação
+        };
+
+        // Função para fechar a notificação
+        function closeNotification() {
+            document.getElementById('notification').style.display = 'none';
+        }
+    </script>
+    <script>
+        // Função para pegar o ID do usuário logado do localStorage
+        function getUserId() {
+            return localStorage.getItem("user_id");  // Pega o ID do usuário
+        }
+
+        // Função para obter o saldo do usuário logado
+        function getSaldoUsuario() {
+            var userId = getUserId();  // Pega o ID do usuário logado
+
+            if (!userId) {
+                console.log("Usuário não logado!");
+                window.location.href = 'index.html';  // Redireciona para login se não houver ID
+                return;
+            }
+
+            // Faz a requisição para pegar os dados do usuário
+            $.ajax({
+                url: 'https://meuappi.onrender.com/usuarios/' + userId, // API para pegar o saldo
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    console.log("Resposta da API: ", res);
+                    if (res && res.saldo !== undefined) {
+                        console.log("Saldo do usuário logado: ", res.saldo);
+                        // Atualiza o saldo na interface
+                        updateSaldo(res.saldo);
+                    } else {
+                        console.log("Saldo não encontrado na resposta!");
+                    }
+                },
+                error: function(error) {
+                    console.log("Erro ao buscar saldo: ", error);
+                }
+            });
+        }
+
+        // Função para atualizar o saldo na interface
+        function updateSaldo(saldo) {
+            var saldoElement = document.getElementById("saldo");
+            if (saldoElement) {
+                saldoElement.textContent = "AKZ " + saldo;
+            } else {
+                console.log("Elemento com id 'saldo' não encontrado.");
+            }
+        }
+
+        // Chama as funções quando a página for carregada
+        window.onload = function() {
+            getSaldoUsuario();  // Chama a função para buscar o saldo do usuário
+            document.getElementById('notification').style.display = 'block'; // Exibe a notificação
+        };
+
+        function closeNotification() {
+            document.getElementById('notification').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

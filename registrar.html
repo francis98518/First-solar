@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar - First Solar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://kko.orsted-ao.com/uploads/image/20250323/86211b863976238dae6f6b644e5f2e56.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white; /* Alterado para texto branco */
+        }
+
+        .register-container {
+            background: rgba(0, 0, 0, 0.9); /* Alterado para fundo preto */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Sombras brancas */
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            color: white; /* Alterado para título branco */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: white; /* Alterado para labels brancas */
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #fff; /* Alterado para borda branca */
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: black; /* Alterado para fundo preto */
+            color: white; /* Alterado para texto branco */
+        }
+
+        button {
+            background-color: white; /* Alterado para fundo branco */
+            color: black; /* Alterado para texto preto */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ccc; /* Fundo cinza claro ao passar o mouse */
+        }
+
+        .login-link {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: lightblue; /* Alterado para link azul claro */
+            text-decoration: none;
+        }
+
+        .links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .links a {
+            font-size: 14px;
+            color: lightblue; /* Alterado para links azul claro */
+            text-decoration: none;
+        }
+
+        /* Estilo para o Toast centralizado */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.7); /* Alterado para fundo branco */
+            color: black; /* Alterado para texto preto */
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 1000;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>First Solar</h1>
+        <form id="register-form" action="#" method="POST">
+            <label for="nome">Nome do usuário</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+
+            <label for="telefone">Número de telefone do usuário</label>
+            <input type="text" id="telefone" name="telefone" placeholder="+244" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" placeholder="Senha" required>
+
+            <label for="confirmar_senha">Digite sua senha novamente</label>
+            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirmar senha" required>
+
+            <label for="codigo_convite_referido">Código de convite</label>
+            <input type="text" id="codigo_convite_referido" name="codigo_convite_referido" placeholder="Código de convite" disabled>
+
+            <label for="iban">Adcione o seu iban (21 dígitos)</label>
+            <input type="text" id="iban" name="iban" placeholder="Digite seu IBAN" required pattern="^\d{21}$" title="O IBAN deve conter exatamente 21 dígitos numéricos">
+
+            <button type="submit" id="register-btn">Registrar</button>
+        </form>
+        
+        <div class="login-link">
+            Você tem uma conta? <a href="index.html">Login</a>
+        </div>
+
+        <hr>
+
+        <div class="registrar.html">
+            <a href="https://t.me/FirstSolar091">Atendimento</a>
+            <a href="https://t.me/+aar_DWVyiHxiNTdk">Grupo</a>
+        </div>
+    </div>
+
+    <script>
+        // Função para pegar o código da URL e preencher o campo de código de convite
+        function getInviteCodeFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const inviteCode = urlParams.get('codigo_convite');
+            if (inviteCode) {
+                document.getElementById('codigo_convite_referido').value = inviteCode;
+            }
+        }
+
+        // Função para gerar o link de convite
+        function generateInviteLink(codigo_convite) {
+            return `file:///C:/Users/us/Desktop/software/registrar.html?codigo_convite=${codigo_convite}`;
+        }
+
+        // Função para verificar se o telefone já está registrado
+        async function checkPhoneExists(telefone) {
+            try {
+                // Realizando a requisição à API para verificar o telefone
+                const response = await fetch(`https://meuappi.onrender.com/usuarios?telefone=${telefone}`);
+
+                // Certifique-se de que a resposta é válida
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Verificando se algum usuário com o telefone já existe
+                    if (data && Array.isArray(data) && data.length > 0) {
+                        for (let user of data) {
+                            if (user.telefone === telefone) {
+                                return true; // Telefone já existe
+                            }
+                        }
+                    }
+                    return false; // Caso contrário, o telefone não existe
+                } else {
+                    throw new Error('Erro ao consultar a API');
+                }
+            } catch (error) {
+                console.error('Erro ao verificar o telefone:', error);
+                return false; // Retorna false em caso de erro, para continuar o fluxo
+            }
+        }
+
+        // Função de cadastro
+        async function registerUser(event) {
+            event.preventDefault(); // Evita o envio do formulário
+
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const senha = document.getElementById('senha').value;
+            const iban = document.getElementById('iban').value;
+            const codigo_convite_referido = document.getElementById('codigo_convite_referido').value || '';
+
+            // Validação de campos obrigatórios
+            if (!nome || !telefone || !senha || !iban) {
+                notice('Todos os campos são obrigatórios!', 'error');
+                return;
+            }
+
+            // Validação da senha
+            if (senha.length < 6) {
+                notice('A senha deve ter pelo menos 6 dígitos.', 'error');
+                return;
+            }
+
+            // Validação do telefone
+            if (!/^\d{9}$/.test(telefone) || telefone[0] !== '9') {
+                notice('O número de telefone deve ser angolano.', 'error');
+                return;
+            }
+
+            // Validação do IBAN (21 dígitos numéricos)
+            if (!/^\d{21}$/.test(iban)) {
+                notice('O IBAN deve conter exatamente 21 dígitos numéricos.', 'error');
+                return;
+            }
+
+            // Verificar se o telefone já existe
+            const telefoneExistente = await checkPhoneExists(telefone);
+            if (telefoneExistente) {
+                notice('Este número de telefone já está Registrado.', 'error');
+                return;
+            }
+
+            const id = generateUniqueId();  // Gerando id único
+            const codigo_convite = generateInviteCode();  // Gerando código de convite único
+            const saldo = 0;  // Valor fixo conforme sua estrutura
+
+            // Objeto com dados do usuário
+            const userData = {
+                id: id,
+                nome: nome,
+                telefone: telefone,
+                senha: senha,
+                iban: iban,  // Enviando o IBAN para o banco de dados
+                codigo_convite: codigo_convite,
+                codigo_convite_referido: codigo_convite_referido,
+                saldo: saldo
+            };
+
+            // Enviar dados para a API
+            try {
+                const response = await fetch('https://meuappi.onrender.com/usuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Sucesso
+                    notice('Cadastro realizado com sucesso!', 'success', 'index.html');
+                } else {
+                    // Erro na resposta da API
+                    notice('Ocorreu um erro no cadastro. Tente novamente.', 'error');
+                }
+            } catch (error) {
+                // Erro ao fazer a requisição
+                notice('Ocorreu um erro, tente novamente.', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        // Função para gerar um id único
+        function generateUniqueId() {
+            return Math.random().toString(36).substr(2, 6); // Exemplo de id único
+        }
+
+        // Função para gerar um código de convite único
+        function generateInviteCode() {
+            return Math.random().toString(36).substr(2, 9); // Exemplo de código único
+        }
+
+        // Função para exibir uma notificação (Toast)
+        function notice(message, type = null, url = null) {
+            const toast = document.createElement('div');
+            toast.classList.add('toast');
+            toast.innerText = message;
+
+            document.body.appendChild(toast);
+
+            // Exibindo o toast com animação
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // Removendo o toast após 3 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+
+            // Redirecionamento após 3 segundos, se necessário
+            if (url) {
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 3000);
+            }
+        }
+
+        // Chama a função ao carregar a página
+        window.onload = function() {
+            getInviteCodeFromURL();
+        };
+
+        // Adicionar o evento de submit no formulário
+        document.getElementById('register-form').addEventListener('submit', registerUser);
+    </script>
+</body>
+</html>

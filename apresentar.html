@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;  /* Fundo branco */
+            color: black;  /* Texto preto */
+            text-align: left;  /* Alinhamento do texto à esquerda */
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Garante que o corpo da página ocupe toda a altura da tela */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;  /* Fixa o cabeçalho no topo da página */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;  /* Cor de fundo do cabeçalho */
+            padding: 10px;
+            z-index: 1000;  /* Garante que o botão esteja acima de outros elementos */
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6200ea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            width: 100%; /* Largura total da tela */
+            margin: auto;
+            padding-top: 60px;  /* Adiciona espaço para o cabeçalho fixo */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #1e1e1e;  /* Fundo preto para a tabela */
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #6200ea;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Estilo para o texto contínuo com parágrafos simples */
+        .simple-text {
+            width: 100%; /* Cada parágrafo ocupa 100% da largura da tela */
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 0;
+            padding: 0;
+            text-align: justify; /* Justifica o texto dentro do parágrafo */
+            display: block; /* Garante que cada parágrafo seja um bloco separado */
+        }
+
+        p {
+            margin: 0;
+            padding: 0 20px; /* Adiciona um pouco de padding nas laterais */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho com o botão de voltar -->
+    <header>
+        <a href="home.html" class="back-button">Voltar</a>
+    </header>
+
+    <div class="container">
+        <h2>Introdução</h2>
+        <div class="simple-text">
+           </p>
+        </div>
+
+        <div class="simple-text">
+            <p>2: Convide novos utilizadores para recarregar e ganhar recompensas de comissão. Os utilizadores de nível 1 receberão uma recompensa de recarga de 2%, os utilizadores de nível 2 receberão uma recompensa de recarga de 1% e os utilizadores de nível 3 receberão uma recompensa de recarga de 0,5%.</p>
+        </div>
+
+        <div class="simple-text">
+            <p>3: Convide a equipa a comprar tarefas (leia a lista de tarefas da APP).</p>
+        </div>
+
+        <div class="simple-text">
+            <p>4: Recompensa total do investimento da equipa (ler lista de tarefas da APP).</p>
+        </div>
+
+        <div class="simple-text">
+            <p>5: Os benefícios são apresentados na tabela abaixo!</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>Apelido</th>
+                <th>Preço do Produto</th>
+                <th>Renda Diária</th>
+                <th>Receita Total</th>
+                <th>Duração (dias)</th>
+            </tr>
+            <tr>
+                <td>VIP1</td>
+                <td>8000</td>
+                <td>1150.00</td>
+                <td>80500.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP2</td>
+                <td>15000</td>
+                <td>2156.25</td>
+                <td>150937.50</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP3</td>
+                <td>30000</td>
+                <td>4312.50</td>
+                <td>301875.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP4</td>
+                <td>50000</td>
+                <td>7187.50</td>
+                <td>503125.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP5</td>
+                <td>100000</td>
+                <td>14375.00</td>
+                <td>1006250.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP6</td>
+                <td>200000</td>
+                <td>28750.00</td>
+                <td>2012500.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>VIP7</td>
+                <td>400000</td>
+                <td>57500.00</td>
+                <td>4025000.00</td>
+                <td>70</td>
+            </tr>
+            <tr>
+               
+            
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Usuário</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+        }
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        .profile {
+            background-color: #000;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        .balance {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .tasks {
+            background-color: #c7b08b;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .tasks button {
+            background-color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu {
+            background-color: black;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+        .menu div {
+            text-align: center;
+            color: white;
+            cursor: pointer;
+        }
+        .menu div img {
+            width: 25px;
+            height: 25px;
+        }
+        .options {
+            padding: 15px;
+            background-color: white;
+        }
+        .options div {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .options div img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+        .bottom-nav div {
+            text-align: center;
+            cursor: pointer;
+        }
+        .bottom-nav div img {
+            width: 25px;
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <span>First</span>
+            <span>Solar</span>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile">
+            <img src="https://www.orsted-ao.com/static/tabbar/mine02.png" alt="Perfil">
+            <h3>First Solar</h3>
+            <!-- Aqui vamos exibir o telefone do usuário -->
+            <p id="telefoneUsuario">Carregando...</p>
+            <div class="balance">
+                <!-- Aqui vamos exibir o saldo do usuário -->
+                <strong id="saldoUsuario">KZ 0.00</strong>
+                <p>Saldo atual</p>
+            </div>
+        </div>
+
+        <!-- Tasks Section -->
+        <div class="tasks">
+            <p>centro de carreira</p>
+            <button>IR</button>
+        </div>
+
+        <!-- Menu Section -->
+        <div class="menu">
+            <a href="recarregar.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/home-center23.1c548182.png" alt="Recarga">
+                    <p>Recarga</p>
+                </div>
+            </a>
+            <a href="retirar.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/tab-records.png" alt="Retirar">
+                    <p>Retirar</p>
+                </div>
+            </a>
+            <a href="detalhes.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/ahome.png" alt="Detalhes">
+                    <p>Detalhes da conta</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Options Section -->
+        <div class="options">
+            <a href="sobre.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/about-us.png" alt="Sobre nós">
+                    Sobre nós
+                </div>
+            </a>
+            <a href="cliente-servico.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/card.png" alt="Adicionar Conta">
+                    Adicionar conta
+                </div>
+            </a>
+            <a href="serviços.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/service.png" alt="Serviço">
+                    serviço
+                </div>
+            </a>
+            <a href="produtos.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/records.png" alt="Produtos Adiquiridos">
+                    Produtos Adquiridos
+                </div>
+            </a>
+            <a href="index.html" style="text-decoration: none; color: inherit;">
+                <div>
+                    <img src="https://www.orsted-ao.com/static/icon/login-out.png" alt="Sair">
+                    Sair
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="home.html" style="text-decoration: none; color: inherit;">
+            <div>
+                <img src="https://www.orsted-ao.com/static/tabbar/home-select.png" alt="Home">
+                <p>Home</p>
+            </div>
+        </a>
+        <a href="ganhos.html" style="text-decoration: none; color: inherit;">
+            <div>
+                <img src="https://www.orsted-ao.com/static/tabbar/product.png" alt="Ganhos">
+                <p>Ganhos</p>
+            </div>
+        </a>
+        <a href="equipe.html" style="text-decoration: none; color: inherit;">
+            <div>
+                <img src="https://www.orsted-ao.com/static/tabbar/team.png" alt="Equipe">
+                <p>Equipe</p>
+            </div>
+        </a>
+        <a href="meu.html" style="text-decoration: none; color: inherit;">
+            <div>
+                <img src="https://www.orsted-ao.com/static/tabbar/mine02.png" alt="Meu">
+                <p>Meu</p>
+            </div>
+        </a>
+    </div>
+
+    <script>
+        // Função para fazer a requisição à API
+        async function obterSaldoUsuario() {
+            try {
+                // Recupera o ID do usuário do localStorage
+                const userId = localStorage.getItem('user_id');
+
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                // Realiza a requisição à API para obter o saldo e telefone do usuário
+                const response = await fetch(`https://meuappi.onrender.com/usuarios/${userId}`);
+
+                if (!response.ok) {
+                    throw new Error('Falha na requisição à API');
+                }
+
+                const data = await response.json();
+
+                // Verifica se os dados da resposta contêm o saldo e telefone
+                if (data && data.saldo !== undefined && data.telefone !== undefined) {
+                    // Atualiza a interface com o saldo e o telefone
+                    document.getElementById('saldoUsuario').textContent = `KZ ${data.saldo}`;
+                    document.getElementById('telefoneUsuario').textContent = data.telefone || 'Não disponível';
+                } else {
+                    console.error('Saldo ou telefone não encontrado na resposta da API.');
+                }
+            } catch (error) {
+                console.error('Erro ao obter dados do usuário:', error);
+            }
+        }
+
+        // Quando a página for carregada, chama a função para obter o saldo e telefone
+        window.onload = function() {
+            obterSaldoUsuario();
+        };
+    </script>
+
+</body>
+</html>

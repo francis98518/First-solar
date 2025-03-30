@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Pagamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Faz a tela ocupar 100% da altura */
+        }
+
+        .container {
+            flex: 1; /* Faz o conteúdo ocupar o espaço disponível */
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding-bottom: 80px; /* Espaço para a navegação no rodapé */
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-transform: capitalize;
+            font-size: 14px;
+            color: #888;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: "•";
+            color: #888;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .progress-step.active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .progress-step.active::before {
+            color: green;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-item span {
+            font-weight: bold;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+        }
+
+        .timer {
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Estilo para a navegação no rodapé */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 14px;
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .nav-button {
+            background-color: #ddd;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-button.primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .nav-button.primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo para o Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Estilo para o Cartão de Comprovante */
+        .comprovante-card {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .comprovante-card button {
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comprovante-card button:hover {
+            background-color: #218838;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Estilo para o campo de telefone */
+        .phone-container {
+            margin-top: 20px;
+        }
+
+        .phone-container input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-step">banco</div>
+            <div class="progress-step active">informação</div>
+            <div class="progress-step">certificado</div>
+            <div class="progress-step">confirmar</div>
+        </div>
+
+        <ul class="info-list">
+            <li class="info-item"><span>Nome do banco</span> BAI <span class="copy-icon" onclick="copiarTexto('BAI')">📋</span></li>
+            <li class="info-item"><span>Número do cartão</span> 0040 0000 85161323101 68 <span class="copy-icon" onclick="copiarTexto('0040 0000 85161323101 68')">📋</span></li>
+            <li class="info-item"><span>Nome</span> Celeste Batista Sabino <span class="copy-icon" onclick="copiarTexto('Celeste Batista Sabino')">📋</span></li>
+            <li class="info-item"><span>Quantidade</span> <span id="quantidade">Carregando...</span> <span class="copy-icon" onclick="copiarTexto(document.getElementById('quantidade').innerText)">📋</span></li>
+            <li class="info-item"><span>Número do pedido</span> PAGAMENTO EM 202503260134490900 <span class="copy-icon" onclick="copiarTexto('PAGAMENTO EM 202503260134490900')">📋</span></li>
+            <li class="info-item"><span>Hora do pedido</span> <span id="hora-do-pedido"></span> <span class="copy-icon" onclick="copiarTexto(document.getElementById('hora-do-pedido').innerText)">📋</span></li>
+            <li class="info-item"><span>Prazo de Espera</span> <span class="timer">30MINUTOS</span></li>
+        </ul>
+
+        <!-- Novo campo para telefone -->
+        <div class="phone-container">
+            <label for="phone">Número de Telefone cadastrado</label>
+            <input type="tel" id="phone" name="phone" placeholder="Digite seu número de telefone cadastrado" required>
+        </div>
+
+        <!-- Cartão de Comprovante -->
+        <div class="comprovante-card">
+            <h3>Comprovante de Pagamento</h3>
+            <button onclick="document.getElementById('file-input').click();">📷 Selecione a foto do comprovante</button>
+            <input type="file" id="file-input" class="file-input" accept="image/*" onchange="enviarComprovante(event)">
+            <div id="file-name" class="file-name"></div>
+        </div>
+    </div>
+
+    <!-- Navegação no rodapé -->
+    <div class="navigation">
+        <button class="nav-button" onclick="voltarParaBancos()">Anterior</button>
+        <span>1/4</span>
+        <button class="nav-button primary">Próximo</button>
+    </div>
+
+    <!-- Toast de mensagem -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Função para redirecionar para a página de bancos
+        function voltarParaBancos() {
+            window.location.href = "bancos.html";  // Redireciona para a página bancos.html
+        }
+    
+        // Função para carregar e exibir a quantidade com valor aleatório
+        function carregarQuantidade() {
+            let quantidade = localStorage.getItem('valor_recarga'); // Pega o valor da recarga armazenado no localStorage
+            if (quantidade) {
+                let incrementoAleatorio = Math.floor(Math.random() * 2001) - 1000;
+                let novaQuantidade = parseInt(quantidade) + incrementoAleatorio;
+                document.getElementById('quantidade').innerText = novaQuantidade;
+            } else {
+                document.getElementById('quantidade').innerText = 'Não disponível';
+            }
+        }
+    
+        // Função para obter a hora atual do pedido no fuso horário local
+        function obterHoraDoPedido() {
+            const horaPedido = new Date();
+            const horaFormatada = horaPedido.toLocaleString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+            });
+            document.getElementById('hora-do-pedido').innerText = horaFormatada;
+        }
+    
+        // Função para copiar o texto ao clicar no ícone de copiar
+        function copiarTexto(texto) {
+            const tempInput = document.createElement('input');
+            tempInput.value = texto;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+    
+            showToast('Texto copiado: ' + texto);
+        }
+    
+        // Função para mostrar o Toast
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+    
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    
+        // Função para enviar comprovante e telefone
+        function enviarComprovante(event) {
+            const file = event.target.files[0];
+            const phone = document.getElementById('phone').value; // Obtém o telefone inserido
+    
+            if (!file || !phone) {
+                showToast('Por favor, insira um número de telefone válido e selecione um comprovante.');
+                return;
+            }
+    
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                const fileBase64 = reader.result;
+    
+                const comprovanteData = {
+                    usuarioId: localStorage.getItem('userId'),
+                    comprovante: fileBase64,
+                    telefone: phone, // Envia o telefone junto com o comprovante
+                    status: "pendente"
+                };
+    
+                fetch("https://meuappi.onrender.com/depositos", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(comprovanteData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast("Comprovante e telefone enviados com sucesso!");
+                    } else {
+                        showToast("Sucesso.");
+                        // Redirecionar para home.html após exibir o toast de "Sucesso."
+                        setTimeout(() => {
+                            window.location.href = 'home.html'; // Redireciona para home.html após 3 segundos
+                        }, 3000); // Aguarda 3 segundos para o toast desaparecer antes de redirecionar
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao enviar comprovante", error);
+                    showToast("Erro ao enviar comprovante: " + error.message);
+                });
+            };
+        }
+    
+        // Carrega a quantidade e a hora do pedido quando a página é carregada
+        window.onload = function() {
+            carregarQuantidade();
+            obterHoraDoPedido();
+        };
+    </script>
+    

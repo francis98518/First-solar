@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - First Solar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://kko.orsted-ao.com/uploads/image/20250323/86211b863976238dae6f6b644e5f2e56.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white; /* Altera a cor do texto para branco */
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.9); /* Fundo preto com opacidade */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Sombras brancas */
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            color: white; /* Título em branco */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: white; /* Labels em branco */
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #fff; /* Borda branca */
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: black; /* Fundo do campo de input preto */
+            color: white; /* Texto dentro do input em branco */
+        }
+
+        button {
+            background-color: white; /* Botão branco */
+            color: black; /* Texto do botão preto */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ccc; /* Fundo cinza claro ao passar o mouse */
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            color: lightblue; /* Link em azul claro */
+            text-decoration: none;
+        }
+
+        .links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .links a {
+            font-size: 14px;
+            color: lightblue; /* Links em azul claro */
+        }
+
+        /* Estilo para o Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.7); /* Toast com fundo branco */
+            color: black; /* Texto do Toast preto */
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Mensagem de Toast</div>
+</body>
+</html>
+
+</head>
+<body>
+    <div class="login-container">
+        <h1>First Solar</h1>
+        <form id="loginForm">
+            <label for="telefone">Número de telefone</label>
+            <input type="text" id="telefone" name="telefone" placeholder="+244" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <button type="button" onclick="login()">Login</button>
+        </form>
+        <a href="registrar.html">Registrar</a>
+        <div class="links">
+            <a href="https://t.me/FirstSolar091">Atendimento de serviço</a>
+            <a href="https://t.me/+aar_DWVyiHxiNTdk">Vá para o grupo</a>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000); // O toast desaparecerá após 3 segundos
+        }
+
+        function login() {
+            var telefone = document.getElementById('telefone').value.trim();
+            var senha = document.getElementById('senha').value.trim();
+
+            // Verifique se os campos estão preenchidos
+            if (telefone === '' || senha === '') {
+                showToast('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Envia a requisição para o servidor remoto
+            fetch('https://meuappi.onrender.com/usuarios?telefone=' + telefone)  // URL da sua API
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);  // Verifique a resposta da API
+
+                    if (data.length === 0) {
+                        showToast('Usuário não existe, por favor cadastre se.');
+                        return;
+                    }
+
+                    // Verificar a senha de todos os usuários com o telefone fornecido
+                    var user = data.find(u => u.senha === senha);
+
+                    if (user) {
+                        // Se o login for bem-sucedido, salva a estrutura completa do usuário no localStorage
+                        console.log('Dados do usuário:', user);  // Verifique se os dados estão corretos
+                        localStorage.setItem("user_data", JSON.stringify(user));  // Salvando todos os dados do usuário
+
+                        // Também salva apenas o ID do usuário para ser usado posteriormente
+                        localStorage.setItem("user_id", user.id);  // Armazena somente o ID
+
+                        // Exibe a notificação de sucesso
+                        showToast('Login bem-sucedido!');
+
+                        // Redireciona para a página home
+                        window.location.href = 'home.html';
+                    } else {
+                        showToast('Senha incorreta!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar o login:', error);
+                    showToast('Ocorreu um erro. Tente novamente.');
+                });
+        }
+    </script>
+</body>
+</html>

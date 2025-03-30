@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Pagamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Faz a tela ocupar 100% da altura */
+        }
+
+        .container {
+            flex: 1; /* Faz o conteúdo ocupar o espaço disponível */
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding-bottom: 80px; /* Espaço para a navegação no rodapé */
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-transform: capitalize;
+            font-size: 14px;
+            color: #888;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: "•";
+            color: #888;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .progress-step.active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .progress-step.active::before {
+            color: green;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-item span {
+            font-weight: bold;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+        }
+
+        .timer {
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Estilo para a navegação no rodapé */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 14px;
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .nav-button {
+            background-color: #ddd;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-button.primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .nav-button.primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo para o Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Estilo para o Cartão de Comprovante */
+        .comprovante-card {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .comprovante-card button {
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comprovante-card button:hover {
+            background-color: #218838;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-step">banco</div>
+            <div class="progress-step active">informação</div>
+            <div class="progress-step">certificado</div>
+            <div class="progress-step">confirmar</div>
+        </div>
+
+        <ul class="info-list">
+            <li class="info-item"><span>Nome do banco</span> BFA <span class="copy-icon" onclick="copiarTexto('BAI')">📋</span></li>
+            <li class="info-item"><span>Número do cartão</span> 000600002035568230109 <span class="copy-icon" onclick="copiarTexto('0040 0000 85161323101 68')">📋</span></li>
+            <li class="info-item"><span>Nome</span> Tomás <span class="copy-icon" onclick="copiarTexto('Celeste Batista Sabino')">📋</span></li>
+            <!-- Exibe a quantidade com o valor aleatório somado ou diminuído -->
+            <li class="info-item"><span>Quantidade</span> <span id="quantidade">Carregando...</span> <span class="copy-icon" onclick="copiarTexto(document.getElementById('quantidade').innerText)">📋</span></li>
+            <li class="info-item"><span>Número do pedido</span> PAGAMENTO EM First Solar <span class="copy-icon" onclick="copiarTexto('PAGAMENTO EM 202503260134490900')">📋</span></li>
+            <li class="info-item"><span>Hora do pedido</span> <span id="hora-do-pedido"></span> <span class="copy-icon" onclick="copiarTexto(document.getElementById('hora-do-pedido').innerText)">📋</span></li>
+            <li class="info-item"><span>Prazo de Espera</span> <span class="timer">30MINUTOS</span></li>
+        </ul>
+
+        <!-- Cartão de Comprovante -->
+        <div class="comprovante-card">
+            <h3>Comprovante de Pagamento</h3>
+            <button onclick="document.getElementById('file-input').click();">📷 Selecione a foto do comprovante</button>
+            <input type="file" id="file-input" class="file-input" accept="image/*" onchange="enviarComprovante(event)">
+            <div id="file-name" class="file-name"></div>
+        </div>
+    </div>
+
+    <!-- Navegação no rodapé -->
+    <div class="navigation">
+        <button class="nav-button" onclick="voltarParaBancos()">Anterior</button>
+        <span>1/4</span>
+        <button class="nav-button primary">Próximo</button>
+    </div>
+
+    <!-- Toast de mensagem -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Função para redirecionar para a página de bancos
+        function voltarParaBancos() {
+            window.location.href = "bancos.html";  // Redireciona para a página bancos.html
+        }
+
+        // Função para carregar e exibir a quantidade com valor aleatório
+        function carregarQuantidade() {
+            let quantidade = localStorage.getItem('valor_recarga'); // Pega o valor da recarga armazenado no localStorage
+            if (quantidade) {
+                // Gera um número aleatório entre -1000 e +1000
+                let incrementoAleatorio = Math.floor(Math.random() * 2001) - 1000;
+                let novaQuantidade = parseInt(quantidade) + incrementoAleatorio; // Soma ou subtrai o valor aleatório do valor armazenado
+                document.getElementById('quantidade').innerText = novaQuantidade; // Atualiza o campo de quantidade com o valor atualizado
+            } else {
+                document.getElementById('quantidade').innerText = 'Não disponível'; // Caso não tenha valor, exibe uma mensagem
+            }
+        }
+
+        // Função para obter a hora atual do pedido no fuso horário local
+        function obterHoraDoPedido() {
+            const horaPedido = new Date(); // Cria um novo objeto Date com a hora local
+            const horaFormatada = horaPedido.toLocaleString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+            });
+            document.getElementById('hora-do-pedido').innerText = horaFormatada; // Atualiza a hora do pedido na página
+        }
+
+        // Função para copiar o texto ao clicar no ícone de copiar
+        function copiarTexto(texto) {
+            // Cria um campo de input temporário para copiar o texto
+            const tempInput = document.createElement('input');
+            tempInput.value = texto;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            // Exibe o Toast com a mensagem de texto copiado
+            showToast('Texto copiado: ' + texto);
+        }
+
+        // Função para mostrar o Toast
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            // Remove a classe 'show' após 3 segundos
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        function enviarComprovante(event) {
+    const file = event.target.files[0];
+    if (!file) return; // Verifica se há arquivo selecionado
+
+    // Lê o arquivo como base64
+    const reader = new FileReader();
+    reader.readAsDataURL(file); // Converte a imagem para base64
+    reader.onload = function() {
+        // Aqui, após a leitura do arquivo, você tem o arquivo em base64
+        const fileBase64 = reader.result;
+
+        // Cria o objeto de dados a ser enviado para a API
+        const comprovanteData = {
+            usuarioId: localStorage.getItem('userId'),  // Obtém o ID do usuário armazenado no localStorage
+            comprovante: fileBase64,  // Salva a imagem em base64
+            status: "pendente"  // Status do comprovante (pendente por enquanto)
+        };
+
+        // Envia para a API
+        fetch("https://meuappi.onrender.com/depositos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(comprovanteData), // Envia o objeto como JSON
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast("Comprovante enviado com sucesso!");
+            } else {
+                showToast("Sucesso ao enviar comprovante.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao enviar comprovante", error);
+            showToast("Erro ao enviar comprovante: " + error.message);
+        });
+    };
+}
+
+        // Carrega a quantidade e a hora do pedido quando a página é carregada
+        window.onload = function() {
+            carregarQuantidade();
+            obterHoraDoPedido();
+        };
+    </script>
+</body>
+</html>

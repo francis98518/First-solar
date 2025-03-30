@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Solar - Planos de Investimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url(https://kko.orsted-ao.com/uploads/image/20250317/278cf404b70421fa315d642e91a6c489.png);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .planos {
+            padding: 10px;
+        }
+
+        .plano {
+            display: flex;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            align-items: center;
+        }
+
+        .plano img {
+            width: 100px;
+            height: 80px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .plano .info {
+            flex: 1;
+        }
+
+        .plano .info p {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        .plano .investir {
+            background: blue;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer div {
+            text-align: center;
+            flex: 1;
+        }
+
+        .footer div img {
+            width: 24px;
+            height: 24px;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        .toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    top: 50%;                /* Centraliza verticalmente */
+    left: 50%;               /* Centraliza horizontalmente */
+    transform: translate(-50%, -50%); /* Ajuste para centralizar completamente */
+}
+
+
+        .toast.show {
+            visibility: visible;
+            animation: fadeInOut 5s;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Planos de Investimento</div>
+
+    <div class="planos">
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/2a41d6a42670c53eb6dc18f6977d3c84.png" alt="Plano 1">
+            <div class="info">
+                <p><strong>Plano-1</strong></p>
+                <p>Preço: 8000.00 (AOA8000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 1150.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(8000.00, 'Plano-1', 1150.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/3f6eabb3ee54e0dcee78961062e4a693.png" alt="Plano 2">
+            <div class="info">
+                <p><strong>Plano-2</strong></p>
+                <p>Preço: 15000.00 (AOA15000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 2156.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(15000.00, 'Plano-2', 2156.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/46f40b0ae1f14e8ebc5b833f548ceb0a.png" alt="Plano 3">
+            <div class="info">
+                <p><strong>Plano-3</strong></p>
+                <p>Preço: 30000.00 (AOA30000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 4312.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(30000.00, 'Plano-3', 4312.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/278cf404b70421fa315d642e91a6c489.png" alt="Plano 4">
+            <div class="info">
+                <p><strong>Plano-4</strong></p>
+                <p>Preço: 50000.00 (AOA50000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 7187.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(50000.00, 'Plano-4', 7187.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/278cf404b70421fa315d642e91a6c489.png" alt="Plano 5">
+            <div class="info">
+                <p><strong>Plano-5</strong></p>
+                <p>Preço: 100000.00 (AOA100000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 14375.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(100000.00, 'Plano-5', 14375.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/319c7a3039a3a9f99f4c9458a511a256.png" alt="Plano 6">
+            <div class="info">
+                <p><strong>Plano-6</strong></p>
+                <p>Preço: 200000.00 (AOA200000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 28750.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(200000.00, 'Plano-6', 28750.05)">Investir</button>
+        </div>
+
+        <div class="plano">
+            <img src="https://kko.orsted-ao.com/uploads/image/20250317/be917676780cc2f6460b34715e163821.png" alt="Plano 7">
+            <div class="info">
+                <p><strong>Plano-7</strong></p>
+                <p>Preço: 400000.05 (AOA400000.00)</p>
+                <p>Período de validade: 360</p>
+                <p>Renda diária: 57500.05</p>
+                <p>Limite de quantidade: 90</p>
+            </div>
+            <button class="investir" onclick="investir(400000.00, 'Plano-7', 57500.05)">Investir</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <a href="home.html" style="text-decoration: none; color: inherit;">
+                <img src="https://www.orsted-ao.com/static/tabbar/home-select.png" alt="Home">
+                <p>Home</p>
+            </a>
+        </div>
+        <div>
+            <a href="ganhos.html" style="text-decoration: none; color: inherit;">
+                <img src="https://www.orsted-ao.com/static/tabbar/product.png" alt="Ganhos">
+                <p>Ganhos</p>
+            </a>
+        </div>
+        <div>
+            <a href="Equipe.html" style="text-decoration: none; color: inherit;">
+                <img src="https://www.orsted-ao.com/static/tabbar/team.png" alt="Equipe">
+                <p>Equipe</p>
+            </a>
+        </div>
+        <div>
+            <a href="meu.html" style="text-decoration: none; color: inherit;">
+                <img src="https://www.orsted-ao.com/static/tabbar/mine02.png" alt="Meu">
+                <p>Meu</p>
+            </a>
+        </div>
+    </div>
+
+     <!-- Toast Notification -->
+     <div id="toast" class="toast"></div>
+
+     <script>
+         // Função para mostrar o Toast
+         function showToast(message) {
+             const toast = document.getElementById('toast');
+             toast.textContent = message;
+             toast.className = "toast show"; // Adiciona a classe "show" para exibir o toast
+ 
+             // Remove o toast após 3 segundos
+             setTimeout(function () {
+                 toast.className = toast.className.replace("show", "");
+             }, 3000);
+         }
+ 
+         // Função para investir (compra de produto)
+         async function investir(precoProduto, nomeProduto, retornoDiario) {
+             try {
+                 const userId = localStorage.getItem('user_id'); // Recuperando o ID do usuário logado
+ 
+                 if (!userId) {
+                     showToast("Usuário não logado. Faça o login para continuar.");
+                     return;
+                 }
+ 
+                 // Verifica o saldo do usuário
+                 const responseUsuario = await fetch(`https://meuappi.onrender.com/usuarios/${userId}`);
+                 const usuario = await responseUsuario.json();
+ 
+                 if (usuario.saldo >= precoProduto) {
+                     const novoSaldo = usuario.saldo - precoProduto;
+                     const usuarioAtualizado = { saldo: novoSaldo };
+ 
+                     const updateUsuarioResponse = await fetch(`https://meuappi.onrender.com/usuarios/${userId}`, {
+                         method: 'PATCH',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(usuarioAtualizado)
+                     });
+ 
+                     if (!updateUsuarioResponse.ok) throw new Error('Erro ao atualizar o saldo do usuário');
+ 
+                     const produto = {
+                         nome: nomeProduto,
+                         retorno: retornoDiario,
+                         preco: precoProduto,
+                         usuario_id: userId // Armazenando o ID do usuário que comprou o produto
+                     };
+ 
+                     const addProdutoResponse = await fetch('https://meuappi.onrender.com/produtos', {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(produto)
+                     });
+ 
+                     if (!addProdutoResponse.ok) throw new Error('Erro ao adicionar produto');
+ 
+                     showToast('Produto adquirido com sucesso!.');
+                 } else {
+                     showToast('Saldo insuficiente. Por favor, recarregue sua conta.');
+                 }
+             } catch (error) {
+                 console.error('Erro:', error);
+                 showToast('Ocorreu um erro. Tente novamente.');
+             }
+         }
+     </script>
+ 
+ </body>
+ </html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 20px;
+        }
+
+        .back-button {
+            text-decoration: none;
+            font-size: 24px;
+            margin-right: 10px;
+            color: #000;
+        }
+
+        h1 {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .balance-section {
+            background: url('https://www.orsted-ao.com/static/backimg/task-center.png') no-repeat center center/cover;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .wallet-icon {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .balance-info {
+            flex-grow: 1;
+        }
+
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .balance-label {
+            font-size: 14px;
+        }
+
+        .withdrawal-form {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .withdrawal-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .withdrawal-form input,
+        .withdrawal-form select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .withdraw-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .withdraw-button:hover {
+            background-color: #0056b3;
+        }
+
+        .tips {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .tips ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        /* Estilos para o Toast */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            top: 50%; /* Centralizar verticalmente */
+            left: 50%; /* Centralizar horizontalmente */
+            transform: translate(-50%, -50%); /* Ajustar para o centro */
+            white-space: nowrap; /* Evita quebra de linha no texto */
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="home.html" class="back-button">&larr;</a>
+            <h1>Retirar</h1>
+        </header>
+
+        <div class="balance-section">
+            <img src="https://www.orsted-ao.com/static/icon/card.png" alt="Wallet Icon" class="wallet-icon">
+            <div class="balance-info">
+                <p class="balance" id="currentBalance">KZ 0.00</p>
+                <p class="balance-label">Saldo atual</p>
+            </div>
+        </div>
+
+        <div class="withdrawal-form">
+            <label for="amount">Valor do saque</label>
+            <input type="number" id="amount" placeholder="Insira o valor a retirar" oninput="calculateDeduction()">
+
+            <label for="iban">IBAN (apenas 21 Digitos)</label>
+            <input type="text" id="iban" placeholder="Insira o número do IBAN" pattern="\d*" title="Apenas números são permitidos">
+
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" placeholder="Insira seu nome completo">
+
+            <label for="bank">Selecione o banco</label>
+            <select id="bank">
+                <option value="bfa">Banco BFA</option>
+                <option value="bai">Banco BAI</option>
+                <option value="atlantico">Banco ATLANTICO</option>
+                <option value="bic">Banco BIC</option>
+                <option value="outros">Outros</option>
+            </select>
+
+            <label for="finalAmount">Valor após dedução de 12%</label>
+            <input type="text" id="finalAmount" readonly placeholder="Valor a receber após a retirada" />
+
+            <button class="withdraw-button" onclick="retirar()">Retirar dinheiro</button>
+        </div>
+
+        <div class="tips">
+            <h4>Dicas:</h4>
+            <ul>
+                <li>O valor chegará em sua conta em até 30min a 2h, caso o valor não chegar nesse tempo entre em contacto com atendimento</li>
+                <li>Os saques não têm limites nem tempo para ser retirado, podes retirar quantas vezes quiser por dia</li>
+                <li>O valor do saque será descontado em 12% automaticamente.</li>
+                <li>Certifique-se de inserir o IBAN corretamente, com apenas números.</li>
+                <li>Escolha um banco entre os listados ou selecione "Outros".</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Adicionando o jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        // Função para pegar o ID do usuário logado do localStorage
+        function getUserId() {
+            return localStorage.getItem("user_id");  // Pega o ID do usuário
+        }
+
+        // Função para obter o saldo do usuário logado
+        function getSaldoUsuario() {
+            var userId = getUserId();  // Pega o ID do usuário logado
+
+            if (!userId) {
+                console.log("Usuário não logado!");
+                window.location.href = 'login.html';  // Redireciona para login se não houver ID
+                return;
+            }
+
+            // Faz a requisição para pegar os dados do usuário
+            $.ajax({
+                url: 'https://meuappi.onrender.com/usuarios/' + userId, // API para pegar o saldo
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    console.log("Resposta da API: ", res);
+                    if (res && res.saldo !== undefined) {
+                        console.log("Saldo do usuário logado: ", res.saldo);
+                        // Atualiza o saldo na interface
+                        document.getElementById("currentBalance").textContent = `KZ ${parseFloat(res.saldo).toFixed(2)}`;
+                    } else {
+                        console.log("Saldo não encontrado na resposta!");
+                    }
+                },
+                error: function(error) {
+                    console.log("Erro ao buscar saldo: ", error);
+                }
+            });
+        }
+
+        // Função para calcular o valor final com dedução de 12%
+        function calculateDeduction() {
+            const amount = document.getElementById('amount').value;
+            if (amount) {
+                const deduction = amount * 0.12;
+                const finalAmount = amount - deduction;
+                document.getElementById('finalAmount').value = finalAmount.toFixed(2);
+            } else {
+                document.getElementById('finalAmount').value = '';
+            }
+        }
+
+        // Chama a função para carregar o saldo quando a página for carregada
+        window.onload = getSaldoUsuario;
+
+        // Função de Retirada
+        async function retirar() {
+            const iban = document.getElementById('iban').value.trim();
+            const nome = document.getElementById('name').value.trim();
+            const valor = parseFloat(document.getElementById('amount').value.trim());
+
+            // Verificar se os campos estão preenchidos corretamente
+            if (!iban || !nome || isNaN(valor) || valor <= 0) {
+                showToast('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            // Verificar se o valor é maior ou igual ao valor mínimo
+            const valorMinimo = 1000;
+            if (valor < valorMinimo) {
+                showToast(`O valor mínimo para saque é KZ ${valorMinimo.toFixed(2)}.`);
+                return;
+            }
+
+            const userId = localStorage.getItem('user_id');
+            if (!userId) {
+                showToast('Usuário não logado. Faça o login para continuar.');
+                return;
+            }
+
+            try {
+                // 1. Verificar saldo do usuário
+                const responseUsuario = await fetch(`https://meuappi.onrender.com/usuarios/${userId}`);
+                const usuario = await responseUsuario.json();
+
+                // Verificar se o saldo é suficiente
+                if (usuario.saldo < valor) {
+                    showToast('Saldo insuficiente para realizar a retirada.');
+                    return;
+                }
+
+                // 2. Deduzir 12% do valor
+                const valorComDesconto = valor * 0.88; // Desconto de 12%
+
+                // Atualizar saldo do usuário no backend
+                const novoSaldo = usuario.saldo - valor;
+                const usuarioAtualizado = { saldo: novoSaldo };
+
+                const updateUsuarioResponse = await fetch(`https://meuappi.onrender.com/usuarios/${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuarioAtualizado)
+                });
+
+                if (!updateUsuarioResponse.ok) {
+                    showToast('Erro ao atualizar saldo. Tente novamente.');
+                    return;
+                }
+
+                // 3. Registrar a retirada no backend com status 'pendente' (false)
+                const retirada = {
+                    usuarioId: userId,
+                    iban: iban,
+                    nome: nome,
+                    valor: valorComDesconto,  // Valor com 12% de desconto
+                    data: new Date().toISOString(),  // Registrar data da retirada
+                    status: false  // Status inicial como 'pendente'
+                };
+
+                const addRetiradaResponse = await fetch('https://meuappi.onrender.com/retiradas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(retirada)
+                });
+
+                if (!addRetiradaResponse.ok) {
+                    showToast('Erro ao registrar a retirada. Tente novamente.');
+                    return;
+                }
+
+                // Sucesso: Exibir toast de sucesso
+                showToast(`Retirada realizada com sucesso! Valor real retirado: AKZ ${valorComDesconto.toFixed(2)}. Status: Pendente.`);
+
+                // Atualizar o saldo exibido na tela
+                localStorage.setItem('saldo', usuario.saldo - valor);
+                getSaldoUsuario();
+
+            } catch (error) {
+                console.error('Erro:', error);
+                showToast('Ocorreu um erro. Tente novamente.');
+            }
+        }
+
+        // Função para mostrar o Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = "toast show"; // Adiciona a classe "show" para exibir o toast
+
+            // Remove o toast após 3 segundos
+            setTimeout(function () {
+                toast.className = toast.className.replace("show", "");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
