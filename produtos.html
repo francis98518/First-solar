@@ -92,7 +92,6 @@
       align-items: center;
       margin-top: 20px;
     }
-
   </style>
 </head>
 <body>
@@ -115,81 +114,97 @@
   <div id="investimentos-lista"></div>
 
   <script>
-    async function carregarInvestimentos() {
-    const userId = localStorage.getItem('user_id'); // Recupera o ID do usuário logado
+    // Função para calcular a contagem regressiva de 45 dias
+    function calcularContagemRegressiva(dataCompra) {
+        const dataLimite = new Date(dataCompra);
+        dataLimite.setDate(dataLimite.getDate() + 45); // Soma 45 dias à data de compra
 
-    if (!userId) {
-        alert('Usuário não logado. Faça o login para continuar.');
-        return;
+        const tempoRestante = dataLimite - new Date(); // Diferença entre a data limite e a data atual
+        const diasRestantes = Math.floor(tempoRestante / (1000 * 60 * 60 * 24)); // Converte para dias
+
+        return diasRestantes > 0 ? `${diasRestantes} dias restantes` : 'Investimento expirado';
     }
 
-    try {
-        // Faz a requisição para buscar todos os produtos
-        const response = await fetch(`https://meuappi.onrender.com/produtos?usuarioId=${userId}`);
+    // Função para carregar os investimentos do usuário logado
+    async function carregarInvestimentos() {
+        const userId = localStorage.getItem('user_id'); // Recupera o ID do usuário logado
 
-        if (!response.ok) throw new Error('Erro ao carregar os investimentos');
-
-        const produtos = await response.json();
-
-        // Filtra os produtos para garantir que apenas os produtos do usuário logado sejam exibidos
-        const produtosDoUsuario = produtos.filter(produto => produto.usuario_id === userId);
-
-        // Se não houver produtos, exibe o quadro vazio
-        if (produtosDoUsuario.length === 0) {
-            document.getElementById('numero-produtos').innerHTML = `
-                <strong>0</strong><br>Produto
-            `;
-            document.getElementById('renda-total').innerHTML = `
-                <strong>0</strong><br>renda
-            `;
-            document.getElementById('investimentos-lista').innerHTML = ''; // Limpa os cartões
+        if (!userId) {
+            alert('Usuário não logado. Faça o login para continuar.');
             return;
         }
 
-        // Atualiza o número de produtos na info-box
-        document.getElementById('numero-produtos').innerHTML = `
-            <strong>${produtosDoUsuario.length}</strong><br>Produto${produtosDoUsuario.length !== 1 ? 's' : ''}
-        `;
+        console.log("ID do usuário logado:", userId); // Verifique o userId logado no console
 
-        // Calcular a soma da renda total
-        const rendaTotal = produtosDoUsuario.reduce((acc, produto) => acc + (produto.retorno || 0), 0);
+        try {
+            // Faz a requisição para buscar os produtos adquiridos pelo usuário logado
+            // A URL agora usa o parâmetro 'usuario_id' corretamente
+            const response = await fetch(`https://meuappi.onrender.com/produtos?usuario_id=${userId}`); // Corrigido aqui para 'usuario_id'
 
-        // Exibir a renda total na info-box
-        document.getElementById('renda-total').innerHTML = `
-            <strong>${rendaTotal}</strong><br>renda
-        `;
+            if (!response.ok) throw new Error('Erro ao carregar os investimentos');
 
-        // Limpa a lista de investimentos para não duplicar conteúdo
-        const listaInvestimentos = document.getElementById('investimentos-lista');
-        listaInvestimentos.innerHTML = '';
+            const produtos = await response.json();
 
-        // Para cada produto retornado pela API, cria um novo cartão
-        produtosDoUsuario.forEach(produto => {
-            const card = document.createElement('div');
-            card.classList.add('card');
+            console.log("Produtos recebidos:", produtos); // Verifique os produtos retornados pela API
 
-            // Exibe o retorno como a renda estimada
-            card.innerHTML = `
-                <img src="https://www.orsted-ao.com/static/ahome2.png" alt="Plano">
-                <div class="card-content">
-                    <h3>${produto.nome || 'Plano não definido'}</h3>
-                    <p>Preço: $${produto.preco || 'Indisponível'}</p>
-                    <p>Renda estimada: AOA${produto.retorno || 'Indisponível'}</p>
-                    <p>Renda atual: AOA${produto.retorno || 'Indisponível'}</p>
-                    <p>${calcularContagemRegressiva(produto.dataCompra)}</p>
-                </div>
+            // Se não houver produtos, exibe o quadro vazio
+            if (produtos.length === 0) {
+                document.getElementById('numero-produtos').innerHTML = `
+                    <strong>0</strong><br>Produto
+                `;
+                document.getElementById('renda-total').innerHTML = `
+                    <strong>0</strong><br>renda
+                `;
+                document.getElementById('investimentos-lista').innerHTML = ''; // Limpa os cartões
+                return;
+            }
+
+            // Atualiza o número de produtos na info-box
+            document.getElementById('numero-produtos').innerHTML = `
+                <strong>${produtos.length}</strong><br>Produto${produtos.length !== 1 ? 's' : ''}
             `;
 
-            // Adiciona o novo cartão à lista de investimentos
-            listaInvestimentos.appendChild(card);
-        });
+            // Calcular a soma da renda total
+            const rendaTotal = produtos.reduce((acc, produto) => acc + (produto.retorno || 0), 0);
 
-    } catch (error) {
-        console.error('Erro:', error);
-        alert('Ocorreu um erro ao carregar os investimentos. Tente novamente.');
+            // Exibir a renda total na info-box
+            document.getElementById('renda-total').innerHTML = `
+                <strong>${rendaTotal}</strong><br>renda
+            `;
+
+            // Limpa a lista de investimentos para não duplicar conteúdo
+            const listaInvestimentos = document.getElementById('investimentos-lista');
+            listaInvestimentos.innerHTML = '';
+
+            // Para cada produto retornado pela API, cria um novo cartão
+            produtos.forEach(produto => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                // Exibe o retorno como a renda estimada
+                card.innerHTML = `
+                    <img src="https://www.orsted-ao.com/static/ahome2.png" alt="Plano">
+                    <div class="card-content">
+                        <h3>${produto.nome || 'Plano não definido'}</h3>
+                        <p>Preço: $${produto.preco || 'Indisponível'}</p>
+                        <p>Renda estimada: AOA${produto.retorno || 'Indisponível'}</p>
+                        <p>Renda atual: AOA${produto.retorno || 'Indisponível'}</p>
+                        <p>${calcularContagemRegressiva(produto.dataCompra)}</p>
+                    </div>
+                `;
+
+                // Adiciona o novo cartão à lista de investimentos
+                listaInvestimentos.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro ao carregar os investimentos. Tente novamente.');
+        }
     }
-}
 
+    // Carregar os investimentos quando a página for carregada
+    window.onload = carregarInvestimentos;
   </script>
 
 </body>
