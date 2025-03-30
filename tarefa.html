@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breakdown of Funds</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      font-size: 18px;
+      font-weight: bold;
+      justify-content: center;
+      position: relative;
+    }
+
+    .header .back {
+      position: absolute;
+      left: 15px;
+      font-size: 24px;
+      text-decoration: none;
+      color: black;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 2px solid #eee;
+      margin-top: 10px;
+    }
+
+    .tab {
+      padding: 10px 0;
+      font-size: 16px;
+      color: #000;
+      flex: 1;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      border-bottom: 2px solid #000;
+      font-weight: bold;
+    }
+
+    .card {
+      background-color: #f5f5f5;
+      margin: 15px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .card .amount {
+      color: #007bff;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 5px 0 10px;
+    }
+
+    .card p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .date {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="meu.html" class="back">&#8592;</a>
+    Breakdown of funds
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="changeTab('retirar')">Retirar</div>
+    <div class="tab" onclick="changeTab('carregar')">Carregando</div>
+    <div class="tab" onclick="changeTab('conta')">Conta</div>
+  </div>
+
+  <div id="retirar" class="card">
+    <h3>Rendirse</h3>
+    <div class="amount">2594.56</div>
+    <p>Número do pedido: 20250326125818372798060</p>
+    <p>Conta: 2594.56</p>
+    <div class="date">
+      <span>Bienes raíces</span>
+      <span>26-03-2025 12:58:18</span>
+    </div>
+  </div>
+
+  <div id="carregar" class="card" style="display: none;">
+    <h3>Carregar</h3>
+    <div class="amount">4591.16</div>
+    <p>Número do pedido: 20250325101557711842010</p>
+    <p>Conta: 4591.16</p>
+    <div class="date">
+      <span>Bienes raíces</span>
+      <span>25-03-2025 10:15:57</span>
+    </div>
+  </div>
+
+  <div id="conta" class="card" style="display: none;">
+    <h3>Conta</h3>
+    <div class="amount">1200.50</div>
+    <p>Número do pedido: 20250324104568965723020</p>
+    <p>Conta: 1200.50</p>
+    <div class="date">
+      <span>Bienes raíces</span>
+      <span>24-03-2025 08:45:18</span>
+    </div>
+  </div>
+
+  <script>
+    function changeTab(tabName) {
+      // Remove the active class from all tabs
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      // Hide all card sections
+      const allCards = document.querySelectorAll('.card');
+      allCards.forEach(card => card.style.display = 'none');
+      
+      // Add the active class to the clicked tab
+      const activeTab = document.querySelector(`.tab:nth-child(${getTabIndex(tabName)})`);
+      activeTab.classList.add('active');
+      
+      // Display the corresponding card
+      const activeCard = document.getElementById(tabName);
+      activeCard.style.display = 'block';
+    }
+
+    function getTabIndex(tabName) {
+      switch (tabName) {
+        case 'retirar':
+          return 1;
+        case 'carregar':
+          return 2;
+        case 'conta':
+          return 3;
+        default:
+          return 1;
+      }
+    }
+  </script>
+
+</body>
+</html>
