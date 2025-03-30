@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Breakdown of Funds</title>
+  <title>Historico</title>
   <style>
     body {
       margin: 0;
@@ -94,40 +94,40 @@
 
   <div class="tabs">
     <div class="tab active" onclick="changeTab('retirar')">Retirar</div>
-    <div class="tab" onclick="changeTab('carregar')">Carregando</div>
+    <div class="tab" onclick="changeTab('detalhes')">Carregando</div>
     <div class="tab" onclick="changeTab('conta')">Conta</div>
   </div>
 
   <div id="retirar" class="card">
-    <h3>Rendirse</h3>
-    <div class="amount">2594.56</div>
-    <p>Número do pedido: 20250326125818372798060</p>
-    <p>Conta: 2594.56</p>
+    <h3>Retirar</h3>
+    <div class="amount">serão apresentado aqui as retiradas</div>
+    <p>Número do pedido: </p>
+    <p>Conta: 2</p>
     <div class="date">
-      <span>Bienes raíces</span>
-      <span>26-03-2025 12:58:18</span>
+      <span></span>
+      <span></span>
     </div>
   </div>
 
-  <div id="carregar" class="card" style="display: none;">
+  <div id="Historico" class="card" style="display: none;">
     <h3>Carregar</h3>
-    <div class="amount">4591.16</div>
-    <p>Número do pedido: 20250325101557711842010</p>
-    <p>Conta: 4591.16</p>
+    <div class="amount">serão apresentados aqui.</div>
+    <p>Número do pedido: </p>
+    <p>Valor: </p>
     <div class="date">
-      <span>Bienes raíces</span>
-      <span>25-03-2025 10:15:57</span>
+      <span></span>
+      <span></span>
     </div>
   </div>
 
   <div id="conta" class="card" style="display: none;">
     <h3>Conta</h3>
-    <div class="amount">1200.50</div>
-    <p>Número do pedido: 20250324104568965723020</p>
-    <p>Conta: 1200.50</p>
+    <div class="amount"></div>
+    <p></p>
+    <p>Conta:</p>
     <div class="date">
-      <span>Bienes raíces</span>
-      <span>24-03-2025 08:45:18</span>
+      <span></span>
+      <span></span>
     </div>
   </div>
 
@@ -154,7 +154,7 @@
       switch (tabName) {
         case 'retirar':
           return 1;
-        case 'carregar':
+        case 'Historico':
           return 2;
         case 'conta':
           return 3;
